@@ -1,16 +1,19 @@
 version: '2'
 
 services:
-  addok:
+  addok%N:
     image: etalab/addok
+    container_name: addok%N
     ports:
     - "7878:7878"
     volumes:
     - ./addok-data/addok.conf:/etc/addok/addok.conf
     - ./addok-data/addok.db:/data/addok.db
     links:
-    - addok-redis:redis
-  addok-redis:
+    - addok-redis%N:redis
+  addok-redis%N:
     image: etalab/addok-redis
+    container_name: redis%N
     volumes:
     - ./addok-data/dump.rdb:/data/dump.rdb
+

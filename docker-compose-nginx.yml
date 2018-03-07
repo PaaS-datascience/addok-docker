@@ -1,0 +1,17 @@
+version: '2'
+
+networks:
+  default:
+    external:
+      name: latelier
+
+  nginx:
+    image: nginx
+    container_name: addok-nginx
+    volumes:
+      - nginx.conf:/etc/nginx/conf.d/default.conf
+      - gzip.conf:/etc/nginx/conf.d/gzip.conf
+    ports:
+      - ${PORT}:80
+    restart: always
+

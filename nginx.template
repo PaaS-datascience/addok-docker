@@ -1,0 +1,29 @@
+upstream addok {
+	server addok%N:7878
+}
+
+server {
+  listen 80 default_server;
+
+  # matchID backend RESTful API
+  location / {
+    proxy_pass http://addok;
+    proxy_redirect off;
+    proxy_read_timeout 3600;
+    proxy_send_timeout 600;
+    # Allow large uploads
+    client_max_body_size 0;
+    # Allow protocol upgrade to websocket
+    proxy_http_version 1.1;
+    proxy_next_upstream off;
+    proxy_set_header Host $http_host;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+
+
+  # kibana paths
+  location ~ ^(/app/|/bundles|/elasticsearch|/status|/api/|/plugins/|/ui/fonts|/es_admin/).* {
+    proxy_pass http://kibana:5601;
+    proxy_redirect off;
+  }
