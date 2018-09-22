@@ -2,6 +2,7 @@ EDITOR=vim
 
 export ADDOK_NODES := 2
 export PORT := 7878
+export WORKERS := 8
 
 dummy		    := $(shell touch artifacts)
 include ./artifacts

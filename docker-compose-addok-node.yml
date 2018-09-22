@@ -11,7 +11,7 @@ services:
     links:
       - addok-redis%N:redis
     environment:
-      WORKERS: 1
+      WORKERS: ${WORKERS}
       LOG_QUERIES: 1
       LOG_NOT_FOUND: 1
       SLOW_QUERIES: 200
