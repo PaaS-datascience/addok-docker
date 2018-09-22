@@ -1,7 +1,3 @@
-upstream addok {
-	server addok%N:7878
-}
-
 server {
   listen 80 default_server;
 
@@ -21,9 +17,4 @@ server {
     proxy_set_header Connection "upgrade";
   }
 
-
-  # kibana paths
-  location ~ ^(/app/|/bundles|/elasticsearch|/status|/api/|/plugins/|/ui/fonts|/es_admin/).* {
-    proxy_pass http://kibana:5601;
-    proxy_redirect off;
-  }
+}

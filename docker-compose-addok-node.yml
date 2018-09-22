@@ -4,8 +4,6 @@ services:
   addok%N:
     image: etalab/addok
     container_name: addok%N
-    ports:
-      - "7878:7878"
     volumes:
       - ./addok-data/addok.conf:/etc/addok/addok.conf
       - ./addok-data/addok.db:/data/addok.db

@@ -15,6 +15,7 @@ ifeq ("$(wildcard /usr/bin/docker)","")
     	apt-transport-https \
     	ca-certificates \
     	curl \
+        zip \
     	software-properties-common
 
 	curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | sudo apt-key add -
@@ -34,18 +35,23 @@ download:
 	mkdir -p addok-data
 	unzip -d addok-data ban_odbl_addok-latest.zip
 
-name: latelier
-
 config:
 	@cat docker-compose-nginx.yml > docker-compose.yml
-	@i=$(ADDOK_NODES); while [ $${i} -gt 1 ]; do \
+	@echo "upstream addok { " > nginx.conf
+	@i=$(ADDOK_NODES); while [ $${i} -gt 0 ]; do \
 		i=`expr $$i - 1`; \
-		cat docker-compose-addok-node.yml | grep -v version | sed "s/%N/$$i/g;" >> docker-compose.yml; \
+		cat docker-compose-addok-node.yml | egrep -v '(version|services)' | sed "s/%N/$$i/g;" >> docker-compose.yml; \
+                echo "  server addok$${i}:${PORT};" >> nginx.conf;\
 	done;\
 	true
-up: network
+	@echo "}" >> nginx.conf
+	@cat nginx.template >> nginx.conf
+
+up: network config
 	docker-compose up -d
 
-restart:
+down:
 	docker-compose down
 
+log:
+	docker-compose logs -f
